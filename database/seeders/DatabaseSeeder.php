@@ -18,9 +18,17 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\Brand::factory(10)->create();
         $this->call([
-            BrandSeeder::class,
-            CategorySeeder::class,
-            ProductSeeder::class,
+            // BrandSeeder::class,
+            // CategorySeeder::class,
+            // ProductSeeder::class,
+            InvoiceSeeder::class,
+            // InvoiceProductSeeder::class,
+            PoliciesSeeder::class,
+            ProductCartsSeeder::class,
+            ProductDetailsSeeder::class,
+            ProductSliderSeeder::class,
+            ProductWishesSeeder::class,
+            ProductReviewSeeder::class,
         ]);
     }
 }

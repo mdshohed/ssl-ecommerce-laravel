@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
+    public function LoginPage(){
+        return view('pages.login-page');
+    }
+    public function VerifyPage(){
+        return view('pages.verify-page');
+    }
     public function UserLogin(Request $request):JsonResponse{
         try{
             $userEmail = $request->userEmail;
@@ -20,7 +26,6 @@ class UserController extends Controller
             $details = ['code'=> $OTP];
             Mail::to($userEmail)->send(new OTPMail($details));
             $req = User::updateOrCreate(['email'=>$userEmail], ['email'=> $userEmail, 'otp'=> $OTP]);
-            echo $req;
             return ResponseHelper::Out('success', "A 6 digit OTP has been send to your email address", 200);
             // return "hello";
         }
@@ -43,6 +48,6 @@ class UserController extends Controller
         }
     }
     public function UserLogOut(){
-        return redirect('/userLoginPage')->cookie('token', '', -1);
+        return redirect('/')->cookie('token', '', -1);
     }
 }

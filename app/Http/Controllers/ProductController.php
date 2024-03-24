@@ -15,6 +15,17 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    public function CartListPage(){
+        return view('pages.cart-list-page');
+    }
+
+    public function WishList(){
+        return view('pages.wish-list-page');
+    }
+    public function Details(){
+        return view('pages.details-page');
+    }
+
     public function ListProduct(Request $request):JsonResponse{
         $user_id = $request->header('id');
         $data = Product::where('user_id', $user_id)->get();
@@ -75,19 +86,21 @@ class ProductController extends Controller
     }
     public function CreateWishList(Request $request):JsonResponse{
         $user_id = $request->header('id');
+        sleep(3);
         $data = ProductWish::updateOrCreate(
             ['user_id'=>$user_id, 'product_id'=> $request->product_id], ['user_id'=>$user_id, 'product_id'=> $request->product_id]
         );
         return ResponseHelper::Out('success', $data, 200);
     }
     public function RemoveWishList(Request $request):JsonResponse{
-        $user_id = $request->header('id');
-        $data = ProductWish::where(['user_id', $user_id, 'product_id'=> $request->product_id])->delete();
-        return ResponseHelper::Out('success', $data, 200);
+        $user_id=$request->header('id');
+        $data=ProductWish::where(['user_id' => $user_id,'product_id'=>$request->product_id])->delete();
+        return ResponseHelper::Out('success',$data,200);
     }
 
     // Product Cart
     public function CreateCardList(Request $request):JsonResponse{
+        sleep(3);
         $user_id = $request->header('id');
         $product_id = $request->input('product_id');
         $color = $request->input('color');
@@ -103,7 +116,7 @@ class ProductController extends Controller
             $UnitPrice = $productDetails->price;
         }
         $totalPrice = $qty * $UnitPrice;
-
+        
         $data = ProductCart::updateOrCreate(
             ['user_id'=> $user_id, 'product_id'=> $product_id],
             [
@@ -111,6 +124,7 @@ class ProductController extends Controller
                 'Product_id'=> $product_id,
                 'color'=> $color,
                 'qty'=> $qty,
+                'size'=>$size,
                 'price'=> $totalPrice
             ]
         );

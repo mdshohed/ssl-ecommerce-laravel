@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    // protected $connection = "ssl_ecommerce";
     protected $fillable = [
         'email',
         'otp',

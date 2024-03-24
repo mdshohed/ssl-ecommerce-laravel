@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProductController;
@@ -21,9 +22,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {return view('welcome');});
+
+// user auth
+Route::get('/userLogin/{userEmail}', [UserController::class, 'UserLogin']);
+Route::get('/VerifyLogin/{userEmail}/{OTP}' ,[UserController::class, 'VerifyLogin']);
+Route::get('/logout', [UserController::class, 'UserLogout']);
+
+// User Profile
+Route::post('/CreateProfile', [ProfileController::class, 'CreateProfile'])->middleware([TokenAuthenticate::class]);
+Route::get('/ReadProfile', [ProfileController::class, 'ReadProfile'])->middleware([TokenAuthenticate::class]);
+
+
 Route::get('/brandList', [BrandController::class, 'BrandList']);
 Route::get('/CategoryList', [CategoryController::class, 'CategoryList']);
 Route::get('/ListProduct', [ProductController::class, 'ListProduct']);
@@ -35,14 +45,6 @@ Route::get('/ProductDetailsById/{id}', [ProductController::class, 'ProductDetail
 Route::get('/ListReviewByProduct/{product_id}', [ProductController::class, 'ListReviewByProduct']);
 Route::get('/PolicyByType/{type}', [PolicyController::class, 'PolicyByType']);
 
-// user auth
-Route::get('/userLogin/{userEmail}', [UserController::class, 'UserLogin']);
-Route::get('/VerifyLogin/{userEmail}/{OTP}' ,[UserController::class, 'VerifyLogin']);
-Route::get('/logout', [UserController::class, 'UserLogout']);
-
-// User Profile
-Route::post('/CreateProfile', [ProfileController::class, 'CreateProfile'])->middleware([TokenAuthenticate::class]);
-Route::get('/ReadProfile', [ProfileController::class, 'ReadProfile'])->middleware([TokenAuthenticate::class]);
 
 // Product Review
 Route::post('/CreateProductReview', [ProductController::class, 'CreateProductReview'])->middleware([TokenAuthenticate::class]);
@@ -58,7 +60,7 @@ Route::get('/CartList', [ProductController::class, 'CartList'])->middleware([Tok
 Route::get('/DeleteCartList/{product_id}', [ProductController::class, 'DeleteCartList'])->middleware([TokenAuthenticate::class]);
 
 // Invoice and Payment
-Route::post('/InvoiceCreate', [InvoiceController::class, 'InvoiceCreate'])->middleware([TokenAuthenticate::class]);
+Route::get('/InvoiceCreate', [InvoiceController::class, 'InvoiceCreate'])->middleware([TokenAuthenticate::class]);
 Route::get('/InvoiceList', [InvoiceController::class, 'InvoiceList'])->middleware([TokenAuthenticate::class]);
 Route::get('/InvoiceProductList/{invoice_id}', [InvoiceController::class, 'InvoiceProductList'])->middleware([TokenAuthenticate::class]);
 
@@ -67,5 +69,18 @@ Route::get('/InvoiceProductList/{invoice_id}', [InvoiceController::class, 'Invoi
 Route::post('/PaymentSuccess', [InvoiceController::class, 'PaymentSuccess']);
 Route::get('/PaymentCancel', [InvoiceController::class, 'PaymentCancel']);
 Route::get('/PaymentFail', [InvoiceController::class, 'PaymentFail']);
+
+
+// front-end part
+Route::get('/', [HomeController::class, 'HomePage']);
+Route::get('/by-category', [CategoryController::class, 'ByCategoryPage']);
+Route::get('/by-brand', [BrandController::class, 'ByBrandPage']);
+Route::get('/policy', [PolicyController::class, 'PolicyPage']);
+Route::get('/details', [ProductController::class, 'Details']);
+Route::get('/login', [UserController::class, 'LoginPage']);
+Route::get('/verify', [UserController::class, 'VerifyPage']);
+Route::get('/wish', [ProductController::class, 'WishList']);
+Route::get('/cart', [ProductController::class, 'CartListPage']);
+Route::get('/profile', [ProfileController::class, 'ProfilePage']);
 
 
